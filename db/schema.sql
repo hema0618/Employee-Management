@@ -4,10 +4,14 @@ CREATE DATABASE employees;
 
 USE employees;
 
+--Department Table--
+
 CREATE TABLE department(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30) UNIQUE NOT NULL
 );
+
+-- Role Table--
 
 CREATE TABLE role(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -17,6 +21,8 @@ CREATE TABLE role(
     INDEX dep_ind(department_id),
    CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE
 );
+
+-- Employee Table--
 
 CREATE TABLE employee(
       id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

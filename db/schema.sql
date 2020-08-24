@@ -36,3 +36,7 @@ CREATE TABLE employee(
      CONSTRAINT fk_manager FOREIGN KEY (manager_id) REFERENCES employee(id) ON DELETE SET NULL
 
 );
+
+SELECT * FROM department;
+SELECT * FROM role;
+SELECT * FROM employee;

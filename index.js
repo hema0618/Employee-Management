@@ -17,7 +17,7 @@ var connection = mysql.createConnection({
   
     // Your password
     password: "",
-    database: "top_songsDB"
+    database: "employees"
   });
 
   connection.connect(function(err) {
@@ -68,3 +68,31 @@ var connection = mysql.createConnection({
         }
       });
   }
+
+  function viewEmployees() {
+    var query = "SELECT * FROM employees";
+    connection.query(query, function(err, res) {
+    if (err) throw err;
+    console.log(res.length + " employees found!");
+    console.table('All Employees:', res); 
+    startApp();
+    })
+}
+
+function viewDepartments() {
+    var query = "SELECT * FROM department";
+    connection.query(query, function(err, res) {
+    if(err)throw err;
+    console.table('All Departments:', res);
+    startApp();
+    })
+}
+
+function viewRoles() {
+    var query = "SELECT * FROM role";
+    connection.query(query, function(err, res){
+    if (err) throw err;
+    console.table('All roles:', res);
+    startApp();
+    })
+}

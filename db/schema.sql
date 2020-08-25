@@ -8,7 +8,7 @@ USE employees;
 
 CREATE TABLE department(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(30)  NOT NULL
+    name VARCHAR(30) UNIQUE NOT NULL
 );
 
 -- Role Table--

@@ -38,6 +38,7 @@ function startApp() {
                 "Add an employee",
                 "Add department",
                 "Add a role",
+                "Update employee role",
                 "EXIT"
         ]
     }).then(function (answer) {
@@ -60,16 +61,29 @@ function startApp() {
             case "Add a role":
                 addRole();
                 break;
-            case "EXIT": 
+            case "Update employee role":
+                updateemployeerole();
+                break;
+             case "EXIT": 
                 endApp();
                 break;
-            default:
-                break;
+            
         }
     })
 }
 
-  
+  // view employee
+
+  function viewEmployees() {
+    var query = "SELECT first_name, last_name FROM employees.employee";
+    connection.query(query, function(err, res) {
+    if (err) throw err;
+   for (var i=0; i< res.length; i++) {
+       console.log(`${res[i].first_name} ${res[i].last_name}`);
+   }
+    startApp();
+    });
+}
   
   
  // function artistSearch() {

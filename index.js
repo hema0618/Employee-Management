@@ -1,4 +1,4 @@
-
+// Dependencies
 const inquirer = require("inquirer");
 const consoleTable = require("console.table")
 
@@ -84,6 +84,30 @@ function startApp() {
     startApp();
     });
 }
+  
+//view Depatment
+
+function viewDepartments() {
+    var query = "SELECT name FROM employees.department";
+    connection.query(query, function (err, res) {
+      for (var i = 0; i < res.length; i++) {
+        console.log(res[i].name);
+      }
+      startApp();
+    });
+  }
+  
+  // view roles
+
+  function viewRoles() {
+    var query = "SELECT title FROM employees.role";
+    connection.query(query, function (err, res) {
+      for (var i = 0; i < res.length; i++) {
+        console.log(res[i].title);
+      }
+      startApp();
+    });
+  }
   
   
  // function artistSearch() {

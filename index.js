@@ -78,39 +78,37 @@ function startApp() {
 // view employee
 
 function viewEmployees() {
-    var query = "SELECT first_name, last_name FROM employees.employee";
+    var query =
+        "SELECT employee.first_name, employee.last_name, role.title FROM employee, role WHERE employee.id = role.id;";
     connection.query(query, function (err, res) {
-        if (err) throw err;
-        for (var i = 0; i < res.length; i++) {
-            console.log(`${res[i].first_name} ${res[i].last_name}`);
-        }
+        console.table(res);
         startApp();
     });
 }
-
 //view Depatment
 
 function viewDepartments() {
-    var query = "SELECT name FROM employees.department";
+    var query = "SELECT name, id FROM employees.department ORDER BY id asc";
     connection.query(query, function (err, res) {
-        for (var i = 0; i < res.length; i++) {
-            console.log(res[i].name);
-        }
+        console.table(res);
         startApp();
     });
 }
+
 
 // view roles
 
 function viewRoles() {
-    var query = "SELECT title FROM employees.role";
+    var query =
+        "SELECT role.title, role.salary, department.name FROM role, department WHERE department.id = role.department_id;";
     connection.query(query, function (err, res) {
-        for (var i = 0; i < res.length; i++) {
-            console.log(res[i].title);
-        }
+        console.table(res);
         startApp();
     });
 }
+
+
+
 
 // add employee
 
@@ -157,82 +155,126 @@ function addEmployee() {
 
 function addDepartment() {
     inquirer
-    .prompt([
-        {
-            name: "new_dept", 
-            type: "input", 
-            message: "What is the new department you would like to add?"
-        }
-    ]).then(function (answer) {
-        connection.query(
-            "INSERT INTO department SET ?",
+        .prompt([
             {
-                name: answer.new_dept
+                name: "new_dept",
+                type: "input",
+                message: "What is the new department you would like to add?"
             }
-        );
-          var query = "SELECT * FROM department";
-        connection.query(query, function(err, res) {
-        if(err)throw err;
-        console.table('All Departments:', res);
-        startApp();
+        ]).then(function (answer) {
+            connection.query(
+                "INSERT INTO department SET ?",
+                {
+                    name: answer.new_dept
+                }
+            );
+            var query = "SELECT * FROM department";
+            connection.query(query, function (err, res) {
+                if (err) throw err;
+                console.table('All Departments:', res);
+                startApp();
+            })
         })
-    })
 }
 // add role
 
 
 function addRole() {
-    connection.query("SELECT * FROM department", function(err, res) {
-    if (err) throw err;
+    connection.query("SELECT * FROM department", function (err, res) {
+        if (err) throw err;
 
-    inquirer 
-    .prompt([
-        {
-            name: "new_role",
-            type: "input", 
-            message: "What is the Title of the new role?"
-        },
-        {
-            name: "salary",
-            type: "input",
-            message: "What is the salary of this position? (Enter a number?)"
-        },
-        {
-            name: "deptChoice",
-            type: "rawlist",
-            choices: function() {
-                var deptArry = [];
-                for (let i = 0; i < res.length; i++) {
-                deptArry.push(res[i].name);
+        inquirer
+            .prompt([
+                {
+                    name: "new_role",
+                    type: "input",
+                    message: "What is the Title of the new role?"
+                },
+                {
+                    name: "salary",
+                    type: "input",
+                    message: "What is the salary of this position? (Enter a number?)"
+                },
+                {
+                    name: "deptChoice",
+                    type: "rawlist",
+                    choices: function () {
+                        var deptArry = [];
+                        for (let i = 0; i < res.length; i++) {
+                            deptArry.push(res[i].name);
+                        }
+                        return deptArry;
+                    },
                 }
-                return deptArry;
+            ]).then(function (answer) {
+                let deptID;
+                for (let j = 0; j < res.length; j++) {
+                    if (res[j].name == answer.deptChoice) {
+                        deptID = res[j].id;
+                    }
+                }
+
+                connection.query(
+                    "INSERT INTO role SET ?",
+                    {
+                        title: answer.new_role,
+                        salary: answer.salary,
+                        department_id: deptID
+                    },
+                    function (err, res) {
+                        if (err) throw err;
+                        console.log("Your new role has been added!");
+                        startApp();
+                    }
+                )
+            })
+    })
+
+}
+
+
+//update employee role
+
+function updateemployeerole() {
+    //ask which employee to update
+    inquirer
+        .prompt([
+
+            {
+                name: "currentEmployee",
+                type: "choices",
+                message: "What is the ID of the employee you would like to update?",
             },
-        }
-    ]).then(function (answer) {
-        let deptID;
-        for (let j = 0; j < res.length; j++) {
-            if (res[j].name == answer.deptChoice) {
-                deptID = res[j].id;
-            }
+
+            {
+                name: "newRoleTitle",
+                type: "input",
+                message: "What is the title of their new role?",
+            },
+            {
+                name: "newRoleSalary",
+                type: "input",
+                message: "What is their new salary?",
+            },
+
+            {
+                name: "newRoleDeptID",
+                type: "list",
+                message: "What department will they belong to? Select 1 for Sales, 2 for Engineering, 3 for Finance, 4 for HR.",
+                choices: [1, 2, 3, 4]
+            },
+        ])
+        .then(function (answer) {
+            var query = "UPDATE role SET title = ?, salary = ?, department_id = ? ";
+            connection.query(query, [answer.newRoleTitle, answer.newRoleSalary, answer.newRoleDeptID,parseInt(answer.currentEmployeeID) ], function (err, res) {
+                if (err) throw (err);
+                console.log("successful update!");
+            })
         }
 
-        connection.query(
-            "INSERT INTO role SET ?",
-            {
-                title: answer.new_role,
-                salary: answer.salary,
-                department_id: deptID
-            },
-            function (err, res) {
-                if(err)throw err;
-                console.log("Your new role has been added!");
-                startApp();
-            }
         )
-    })
-    })
-    
 }
+       
 
 function endApp() {
     connection.end();
@@ -265,48 +307,6 @@ function endApp() {
 
 
 
-//function addDepartment() {
-  //  inquirer
-    //    .prompt({
-      //      type: "input",
-        //    message: "What is the name of the department you want to add?",
-          //  name: "department",
-        //})
-        //.then(function (answer) {
-          //  var query = "INSERT INTO department SET ?";
-            //connection.query(query, { dept_name: answer.department }, function (
-              //  err,
-                //res
-            //) {
-              //  if (err) throw err;
-                //console.log("added new department");
 
-            //})
-
-            //startApp();
-
-
-        //}
-
-
-
-            // function artistSearch() {
-            // inquirer
-            // .prompt({
-            // name: "artist",
-            //type: "input",
-            //message: "What artist would you like to search for?"
-            //})
-            //.then(function(answer) {
-            // var query = "SELECT position, song, year FROM top5000 WHERE ?";
-            //connection.query(query, { artist: answer.artist }, function(err, res) {
-            //if (err) throw err;
-            //for (var i = 0; i < res.length; i++) {
-            //console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Year: " + res[i].year);
-            //}
-            //runSearch();
-            //});
-            //});
-            //}
-
+        
 

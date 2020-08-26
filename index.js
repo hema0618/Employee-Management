@@ -265,7 +265,7 @@ function updateemployeerole() {
             },
         ])
         .then(function (answer) {
-            var query = "UPDATE role SET title = ?, salary = ?, department_id = ? ";
+            var query = "UPDATE employee.role_id, SET title = ?, salary = ?, department_id = ?  WHERE id = ?";
             connection.query(query, [answer.newRoleTitle, answer.newRoleSalary, answer.newRoleDeptID,parseInt(answer.currentEmployeeID) ], function (err, res) {
                 if (err) throw (err);
                 console.log("successful update!");

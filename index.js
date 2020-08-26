@@ -64,14 +64,16 @@ function startApp() {
                 case "Update employee role":
                     updateemployeerole();
                     break;
-                case "EXIT": 
+                case "EXIT":
                     endApp();
                     break;
-               
+
 
             }
         })
 }
+
+
 
 // view employee
 
@@ -235,6 +237,7 @@ function addRole() {
 function endApp() {
     connection.end();
 }
+
  // function artistSearch() {
             // inquirer
             // .prompt({
@@ -254,7 +257,7 @@ function endApp() {
             //});
             //}
 
-        
+
 
 
 
@@ -306,4 +309,4 @@ function endApp() {
             //});
             //}
 
-        
+

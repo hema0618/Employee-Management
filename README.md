@@ -12,15 +12,12 @@ Add departments, roles, employees View departments, roles, employees Update empl
 
 ### App instructions: 
 
-i). use arrow keys for selections and follow prompts accordingly
+ use arrow keys for selections and follow prompts accordingly
 
 ### Demo:
 
+![demo](https://user-images.githubusercontent.com/67700843/91367004-56e22b80-e7d3-11ea-8cde-875152e7746b.PNG)
 
-
-### Installation:
-
- package.json npm i mySQL npm i inquirer npm i console.table
 
 
  ## Getting Started

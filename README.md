@@ -19,6 +19,10 @@ Add departments, roles, employees View departments, roles, employees Update empl
 ![demo](https://user-images.githubusercontent.com/67700843/91367004-56e22b80-e7d3-11ea-8cde-875152e7746b.PNG)
 
 
+![file](https://user-images.githubusercontent.com/67700843/91489322-a6c9fc80-e87e-11ea-82d9-59e808c1c3a2.PNG)
+
+
+
 
  ## Getting Started
 
